@@ -5,18 +5,18 @@
 			<p v-if="loading">Loading ...</p>
 			<p class="error" v-if="error">{{error}}</p>
 			<p>Exmple name: MichaeIK</p>
-			<input v-model="githubId" v-on:keyup.enter="fetchData" placeholder="Input github user name"/>
-			<button v-on:click="fetchData">Look for github user</button>
+			<input v-model="githubName" v-on:keyup.enter="addUser" placeholder="Input github user name"/>
+			<button v-on:click="addUser">Look for github user</button>
 		</div>
 		<ul class="githubUserListWrap">
-			<li class="githubUser" v-for="{login, avatar_url, public_repos, followers, following, id} in listGithubUsers" :key="id">
-				<span class="githubUserDeleteButton" v-on:click="deleteGithubUserFromList(id)">X</span>
-				<span>{{login}}</span>
-				<img class="githubUserAva" :src="avatar_url" />
+			<li class="githubUser" v-for="item in this.$store.state.listOfGithubUsers" :key="item.id">
+				<span class="githubUserDeleteButton" v-on:click="deleteGithubUserFromList(item.id)">X</span>
+				<span>{{item.login}}</span>
+				<img class="githubUserAva" :src="item.avatar_url" />
 				<ul class="githubUseerStats">
-					<li><span>Repos:</span> {{ public_repos }}</li>
-					<li><span>Followers:</span> {{ followers }}</li>
-					<li><span>Following:</span> {{ following }}</li>
+					<li><span>Repos:</span> {{ item.public_repos }}</li>
+					<li><span>Followers:</span> {{ item.followers }}</li>
+					<li><span>Following:</span> {{ item.following }}</li>
 				</ul>
 			</li>
 		</ul>
@@ -24,49 +24,31 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
 export default {
 	name: 'Micheal',
 	data () {
 		return {
 			loading: false,
 			error: null,
-			githubId: null,
-			listGithubUsers: [],
-			msg: 'Test github API'
+			githubName: null,
+			msg: 'Test github API',
 		}
 	},
 	updated() {
-		console.log('update code here')
+		// some actions on update
 	},
-	methods: {
-		fetchData(num) {
-			this.error = null;
-			this.loading = true;
-			if(this.githubId) {
-				fetch(`https://api.github.com/users/${this.githubId}`, { method: 'GET', headers: { "Content-Type": "application/json" }})
-					.then(res => res.json())
-					.then(res => {
-						this.loading = false;
-						let checkGithubUser = false;
-						if (res.login && this.listGithubUsers.length) {
-							this.listGithubUsers.forEach((githubUser) => {
-								if (githubUser.id !== res.id) {
-									checkGithubUser = true;
-								}
-							})
-						} else {
-							res.login ? checkGithubUser = true : null;
-						}
-						checkGithubUser ? this.listGithubUsers.push(res) : this.error = "Check user name";
-					})
+	methods: 
+		mapActions({
+			addUser(dispatch){
+				const { githubName } = this;
+				dispatch('getGithubUser', { githubName })
+				this.githubName = "";
+			},
+			deleteGithubUserFromList(dispatch, id) {
+				dispatch('deleteGithubUser', { id })
 			}
-			this.githubId = "";
-		},
-		deleteGithubUserFromList(id) {
-			let indexOfElement = this.listGithubUsers.findIndex(githubUser => githubUser.id === id);
-			if (indexOfElement > -1) this.listGithubUsers.splice(indexOfElement, 1);
-		}
-	}
+		}),
 }
 </script>
 
