@@ -6,7 +6,9 @@ import * as actions from './actions'
 Vue.use(Vuex)
 
 const state = {
-	listOfGithubUsers: {}
+	listOfGithubUsers: {},
+	fetching: false,
+	error: ''
 }
 
 export default new Vuex.Store({

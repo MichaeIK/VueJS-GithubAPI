@@ -2,8 +2,8 @@
 	<div>
 		<div>
 			<h1>{{ msg }}</h1>
-			<p v-if="loading">Loading ...</p>
-			<p class="error" v-if="error">{{error}}</p>
+			<p v-if="this.$store.state.fetching">Loading ...</p>
+			<p class="error" v-if="this.$store.state.error">{{this.$store.state.error}}</p>
 			<p>Exmple name: MichaeIK</p>
 			<input v-model="githubName" v-on:keyup.enter="addUser" placeholder="Input github user name"/>
 			<button v-on:click="addUser">Look for github user</button>
@@ -27,8 +27,6 @@ export default {
 	components: { UserCard },
 	data () {
 		return {
-			loading: false,
-			error: null,
 			githubName: null,
 			msg: 'Test github API',
 		}
@@ -54,6 +52,9 @@ export default {
 <style scoped>
 h1, h2 {
   font-weight: normal;
+}
+.error {
+	color: red;
 }
 .githubUserListWrap {
 	list-style: none;
