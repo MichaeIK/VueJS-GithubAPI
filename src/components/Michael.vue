@@ -36,7 +36,7 @@ export default {
 		}
 	},
 	apollo: {
-		tags () {
+		gql () {
 			return {
 				query: gql`query readUser($login: String!) {
 					user(login: $login) {
@@ -55,12 +55,9 @@ export default {
 					}
 				}`,
 				variables() {
-					console.log('variebl')
 					return this.myVariables
 				},
-				update: result => {
-					this.usersList[result.user.id] = result.user;
-				},
+				update: result => this.$set(this.usersList, result.user.id, result.user),
 			}
 		}
 	},
