@@ -2,11 +2,11 @@
     <div class="githubUserCard">
         <span class="githubUserDeleteButton" v-on:click="deleteGithubUserFromList(item.id)">X</span>
         <span>{{item.login}}</span>
-        <img class="githubUserAva" :src="item.avatar_url" />
+        <img class="githubUserAva" :src="item.avatarUrl" />
         <ul class="githubUseerStats">
-            <li><span>Repos:</span> {{ item.public_repos }}</li>
-            <li><span>Followers:</span> {{ item.followers }}</li>
-            <li><span>Following:</span> {{ item.following }}</li>
+            <li><span>Repos:</span> {{ item.repositories.totalCount }}</li>
+            <li><span>Followers:</span> {{ item.followers.totalCount }}</li>
+            <li><span>Following:</span> {{ item.following.totalCount }}</li>
         </ul>
     </div>
 </template>
