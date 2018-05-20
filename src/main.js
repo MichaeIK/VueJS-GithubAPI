@@ -18,7 +18,7 @@ const httpLink = new HttpLink({
 // Auth via header
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from github
-  const token = "f9f1d2ac79dbeca63a269c204447d66c32ff76d9";
+  const token = "883f2d7ace4685d6b5ae0d0fd8d7074c9d6cdabd";
 
   // return the headers to the context so httpLink can read them
   return {
