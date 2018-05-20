@@ -12,7 +12,7 @@ import router from "./router";
 
 const httpLink = new HttpLink({
   // You should use an absolute URL here
-  uri: "https://api.github.com/graphql"
+  uri: "https://apolloclient.herokuapp.com/graphql"
 });
 
 // Auth via header
