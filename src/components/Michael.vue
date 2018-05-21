@@ -86,6 +86,7 @@ export default {
 				if (item.stats === "Load for last 5 minutes") this.statsList.push(Math.round(item.data * 10))
 				if (item.stats === "Load for last 15 minutes") this.statsList.push(Math.round(item.data * 10))
 			})
+			this.statsList.reverse()
 		}
 	}
 }
