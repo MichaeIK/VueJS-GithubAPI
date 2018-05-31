@@ -15,7 +15,7 @@ import router from './router'
 
 const httpLink = new HttpLink({
 	// You should use an absolute URL here
-	uri: 'https://apolloclient.herokuapp.com/graphql'
+	uri: 'http://localhost:5000/graphql'
 })
 
 // Auth via header

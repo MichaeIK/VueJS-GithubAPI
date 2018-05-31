@@ -40,7 +40,7 @@ import CommitChart from './CommitChart'
 export default {
 	name: 'Micheal',
 	components: { UserCard, StatsChart, CommitChart },
-	data () {
+	data() {
 		return {
 			githubName: null,
 			fetching: false,
@@ -48,43 +48,72 @@ export default {
 			statsList: [],
 			statsTime: [0, 5, 15],
 			serverData: {},
-			myVariables: 0
+			myVariables: 1,
+			param: 1
 		}
 	},
 	apollo: {
-		serverData: {
-			query: gql`query {
-				systemStats {
-					data
-					stats
-					aditionalInfo
+		$subscribe: {
+			// When a tag is added
+			infoUpdated: {
+				query: gql`
+					subscription messageAdded($param: ID!) {
+						messageAdded(channelId: $param) {
+							id
+							text
+						}
+					}
+				`,
+				// Reactive variables
+				variables() {
+					// This works just like regular queries
+					// and will re-subscribe with the right variables
+					// each time the values change
+					return {
+						param: this.param
+					}
+				},
+				// Result hook
+				result({data}) {
+					console.log(data.messageAdded)
 				}
-			}`,
-			variables() {
-				return this.myVariables
-			},
-			result({data, loading}) {
+			}
+		},
+		channels: {
+			query: gql`
+				query {
+					channels {
+						id
+						name
+					}
+				}
+			`,
+			result({ data, loading }) {
 				console.log(data, loading)
-				if (!loading) { 
+				if (!loading) {
 					this.fetching = false
-					this.convertData(data.systemStats)			
+					// this.convertData(data.systemStats)
 				} else this.fetching = true
 			}
 		}
 	},
 	updated() {
 		// some actions on update
+		console.log('sdfsdfsdf', this.$apollo)
 	},
-	methods:{
-		start () {
-			this.myVariables++;
-			// console.log(this.$apollo.query)
+	methods: {
+		start() {
+			this.myVariables++
+			console.log(this.$apollo.query)
 		},
 		convertData(data) {
 			data.map((item, index) => {
-				if (item.stats === "Last cpu load") this.statsList.push(Math.round(item.data * 10))
-				if (item.stats === "Load for last 5 minutes") this.statsList.push(Math.round(item.data * 10))
-				if (item.stats === "Load for last 15 minutes") this.statsList.push(Math.round(item.data * 10))
+				if (item.stats === 'Last cpu load')
+					this.statsList.push(Math.round(item.data * 10))
+				if (item.stats === 'Load for last 5 minutes')
+					this.statsList.push(Math.round(item.data * 10))
+				if (item.stats === 'Load for last 15 minutes')
+					this.statsList.push(Math.round(item.data * 10))
 			})
 			this.statsList.reverse()
 		}
@@ -94,18 +123,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
 .error {
-	color: red;
+  color: red;
 }
 .githubUserListWrap {
-	list-style: none;
-	display: flex;
+  list-style: none;
+  display: flex;
 }
 .chartsWrap {
-	width: 300px;
-	height: 300px;
+  width: 300px;
+  height: 300px;
 }
 </style>
