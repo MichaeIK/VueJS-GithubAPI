@@ -60,7 +60,7 @@ export default {
 					subscription messageAdded($param: ID!) {
 						messageAdded(channelId: $param) {
 							id
-							text
+							stats
 						}
 					}
 				`,
@@ -75,7 +75,7 @@ export default {
 				},
 				// Result hook
 				result({data}) {
-					console.log(data.messageAdded)
+					console.log(JSON.parse(data.messageAdded.stats))
 				}
 			}
 		},
@@ -99,7 +99,6 @@ export default {
 	},
 	updated() {
 		// some actions on update
-		console.log('sdfsdfsdf', this.$apollo)
 	},
 	methods: {
 		start() {
